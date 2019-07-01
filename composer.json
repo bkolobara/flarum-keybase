@@ -1,0 +1,24 @@
+{
+  "name": "bkolobara/flarum-keybase",
+  "description": "Keybase integration for Flarum.",
+  "type": "flarum-extension",
+  "require": {
+    "flarum/core": "0.1.0-beta.8.2",
+    "guzzlehttp/guzzle": "^6.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Bkolobara\\Keybase\\": "src/"
+    }
+  },
+  "extra": {
+    "flarum-extension": {
+      "title": "Keybase",
+      "icon": {
+        "name": "fab fa-keybase",
+        "backgroundColor": "#eeeeee",
+        "color": "#333333"
+      }
+    }
+  }
+}
