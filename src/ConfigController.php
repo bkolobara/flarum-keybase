@@ -35,7 +35,7 @@ class ConfigController implements RequestHandlerInterface
 
         $config = array(
             "username" => array(
-                "regex" => "^[a-zA-Z0-9_]{3,30}$",
+                "re" => "^[a-zA-Z0-9_]{3,30}$",
                 "min" => "3",
                 "max" => "30"
             ),
