@@ -22,7 +22,7 @@ return [
   (new Extend\Frontend('forum'))
     ->js(__DIR__.'/js/dist/forum.js')
     ->css(__DIR__.'/css/forum.css')
-    ->route('/keybase-new-profile-proof', 'keybase.proof'),
+    ->route('/new-keybase-profile-proof', 'keybase.proof'),
   (new Extend\Frontend('admin'))
     ->js(__DIR__.'/js/dist/admin.js')
     ->css(__DIR__ . '/css/admin.less'),

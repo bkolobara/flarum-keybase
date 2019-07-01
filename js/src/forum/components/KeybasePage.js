@@ -54,7 +54,7 @@ export default class LoginPage extends Page {
         </div>
       );
     }
-    if (this.proofValid) {
+    if (!this.proofValid) {
       return (
         <div class="keybase">
           <div class="authorize-window">

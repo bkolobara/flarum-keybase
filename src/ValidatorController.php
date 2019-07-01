@@ -56,9 +56,9 @@ class ValidatorController implements RequestHandlerInterface
             ));
         }
 
-        $kb_username = array_get($request_params, 'kb_username');
-        $kb_ua = array_get($request_params, 'kb_ua');
-        $sig_hash = array_get($request_params, 'token');
+        $kb_username = array_get($request_params, 'kbUsername');
+        $kb_ua = array_get($request_params, 'kbUa');
+        $sig_hash = array_get($request_params, 'sigHash');
 
         $proofValidationURL = self::$proofValidationAPI .
                               'domain=galactictalk.org' .
@@ -69,7 +69,7 @@ class ValidatorController implements RequestHandlerInterface
         $result = $this->httpClient->request('GET', $proofValidationURL);
         $result = json_decode($result->getBody(), true);
 
-        if ($result['proof_valid']) {
+        if (array_key_exists("proof_valid", $result) && $result['proof_valid']) {
             // Check if we already saved this signature hash
             $proof = Proof::where('user_id', $actor->id)->where('sig_hash', $sig_hash)->first();
             if($proof) {

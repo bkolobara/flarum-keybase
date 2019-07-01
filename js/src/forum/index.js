@@ -15,7 +15,7 @@ app.initializers.add("keybase-link-page", () => {
   app.store.models.keybaseValidator = KeybaseValidator;
 
   app.routes.keybaseProfileProof = {
-    path: "/keybase-new-profile-proof",
+    path: "/new-keybase-profile-proof",
     component: KeybasePage.component()
   };
 
