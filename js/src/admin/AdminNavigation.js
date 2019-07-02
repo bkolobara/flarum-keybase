@@ -6,7 +6,7 @@ import SettingsPage from "./SettingsPage";
 
 export default function() {
   app.routes.keybaseSettings = {
-    path: "/seo/settings",
+    path: "/keybase/settings",
     component: SettingsPage.component()
   };
 
