@@ -14,25 +14,16 @@ use Flarum\Api\Controller\AbstractDeleteController;
 class DeleteSvgFullController extends AbstractDeleteController
 {
     use AssertPermissionTrait;
-    /**
-     * @var SettingsRepositoryInterface
-     */
+
     protected $settings;
-    /**
-     * @var Application
-     */
     protected $app;
-    /**
-     * @param SettingsRepositoryInterface $settings
-     */
+
     public function __construct(SettingsRepositoryInterface $settings, Application $app)
     {
         $this->settings = $settings;
         $this->app = $app;
     }
-    /**
-     * {@inheritdoc}
-     */
+
     protected function delete(ServerRequestInterface $request)
     {
         $this->assertAdmin($request->getAttribute('actor'));

@@ -32,11 +32,13 @@ export default class LoginPage extends Page {
 
   async authorise(e) {
     const result = await fetch(`/api/keybase-activate/${this.proofId}`);
-    window.location.replace(
-      `https://keybase.io/_/proof_creation_success?domain=galactictalk.org` +
-        `&kb_username=${this.kbUsername}&username=${this.username}` +
-        `&sig_hash=${this.token}&kb_ua=${this.kbUa}`
-    );
+    if (await result.json()) {
+      window.location.replace(
+        `https://keybase.io/_/proof_creation_success?domain=galactictalk.org` +
+          `&kb_username=${this.kbUsername}&username=${this.username}` +
+          `&sig_hash=${this.token}&kb_ua=${this.kbUa}`
+      );
+    }
   }
 
   view() {
