@@ -62,7 +62,7 @@ class ConfigController implements RequestHandlerInterface
             "svg_full" => $url . '/assets/' . $this->settings->get('keybase_svg_full_path')
         );
 
-        $config["prefill_url"] = $url . '/new-keybase-profile-proof?kbUsername=%{kb_username}&username=%{username}&sigHash=%{sig_hash}&kbUa=%{kb_ua}';
+        $config["prefill_url"] = $url . '/new-keybase-profile-proof?kb_username=%{kb_username}&username=%{username}&sig_hash=%{sig_hash}&kb_ua=%{kb_ua}';
         $config["profile_url"] = $url . '/u/%{username}';
         $config["check_url"] = $url . '/api/keybase-proofs/%{username}';
 

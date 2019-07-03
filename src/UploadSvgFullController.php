@@ -17,25 +17,16 @@ use Flarum\Api\Controller\ShowForumController;
 class UploadSvgFullController extends ShowForumController
 {
     use AssertPermissionTrait;
-    /**
-     * @var SettingsRepositoryInterface
-     */
+
     protected $settings;
-    /**
-     * @var Application
-     */
     protected $app;
-    /**
-     * @param SettingsRepositoryInterface $settings
-     */
+
     public function __construct(SettingsRepositoryInterface $settings, Application $app)
     {
         $this->settings = $settings;
         $this->app = $app;
     }
-    /**
-     * {@inheritdoc}
-     */
+
     public function data(ServerRequestInterface $request, Document $document)
     {
         $this->assertAdmin($request->getAttribute('actor'));
@@ -46,9 +37,11 @@ class UploadSvgFullController extends ShowForumController
             'source' => new Filesystem(new Local(pathinfo($tmpFile, PATHINFO_DIRNAME))),
             'target' => new Filesystem(new Local($this->app->publicPath().'/assets')),
         ]);
+
         if (($path = $this->settings->get('keybase_svg_full_path')) && $mount->has($file = "target://$path")) {
             $mount->delete($file);
         }
+        
         $uploadName = 'keybase-image-'.Str::lower(Str::random(8)).'.svg';
         $mount->move('source://'.pathinfo($tmpFile, PATHINFO_BASENAME), "target://$uploadName");
         $this->settings->set('keybase_svg_full_path', $uploadName);

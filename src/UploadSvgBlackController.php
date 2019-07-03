@@ -27,9 +27,6 @@ class UploadSvgBlackController extends ShowForumController
         $this->app = $app;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function data(ServerRequestInterface $request, Document $document)
     {
         $this->assertAdmin($request->getAttribute('actor'));
@@ -40,9 +37,11 @@ class UploadSvgBlackController extends ShowForumController
             'source' => new Filesystem(new Local(pathinfo($tmpFile, PATHINFO_DIRNAME))),
             'target' => new Filesystem(new Local($this->app->publicPath().'/assets')),
         ]);
+
         if (($path = $this->settings->get('keybase_svg_black_path')) && $mount->has($file = "target://$path")) {
             $mount->delete($file);
         }
+
         $uploadName = 'keybase-image-'.Str::lower(Str::random(8)).'.svg';
         $mount->move('source://'.pathinfo($tmpFile, PATHINFO_BASENAME), "target://$uploadName");
         $this->settings->set('keybase_svg_black_path', $uploadName);

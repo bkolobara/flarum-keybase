@@ -15,13 +15,13 @@ export default class LoginPage extends Page {
       this.kbUsername = urlParams.get("kb_username");
       this.username = urlParams.get("username");
       this.kbUa = urlParams.get("kb_ua");
-      this.token = urlParams.get("token");
+      this.sighHash = urlParams.get("sig_hash");
 
       const keybaseValidator = await app.store.find("keybase-validate", {
         kb_username: this.kbUsername,
         username: this.username,
         kb_ua: this.kbUa,
-        token: this.token
+        sig_hash: this.sighHash
       });
       this.proofValid = keybaseValidator.proofValid();
       if (this.proofValid) {
