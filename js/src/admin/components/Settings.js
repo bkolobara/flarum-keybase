@@ -4,6 +4,7 @@ import Button from "flarum/components/Button";
 import saveSettings from "flarum/utils/saveSettings";
 import Alert from "flarum/components/Alert";
 import UploadImageButton from "flarum/components/UploadImageButton";
+import AutoGroupDropdown from "./AutoGroupDropdown";
 
 export default class Settings extends Component {
   init() {
@@ -14,7 +15,8 @@ export default class Settings extends Component {
       "forum_description",
       "keybase_config_version",
       "keybase_contact_email",
-      "keybase_contact"
+      "keybase_contact",
+      "keybase_auto_group"
     ];
     this.values = {};
 
@@ -76,6 +78,17 @@ export default class Settings extends Component {
                 value={this.values.forum_description()}
                 oninput={m.withAttr("value", this.values.forum_description)}
               />
+            ]
+          })}
+
+          {FieldSet.component({
+            label: "Autotag",
+            children: [
+              <div className="helpText">
+                Here you can choose a group that will be automatically added to
+                a users that links their account with Keybase.
+              </div>,
+              <AutoGroupDropdown setting={this.values.keybase_auto_group} />
             ]
           })}
 
