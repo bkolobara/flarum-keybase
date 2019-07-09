@@ -14,34 +14,34 @@ use Flarum\Database\AbstractModel;
  */
 class Proof extends AbstractModel
 {
-  protected $table = 'keybase_proofs';
+    protected $table = 'keybase_proofs';
 
-  public static function create($user, $kbUsername, $sigHash, $kbUa)
-  {
-    $proof = new static;
-    $proof->user_id = $user->id;
-    $proof->active = false;
-    $proof->kb_username = $kbUsername;
-    $proof->sig_hash = $sigHash;
-    $proof->kb_ua = $kbUa;
+    public static function create($user, $kbUsername, $sigHash, $kbUa)
+    {
+        $proof = new static;
+        $proof->user_id = $user->id;
+        $proof->active = false;
+        $proof->kb_username = $kbUsername;
+        $proof->sig_hash = $sigHash;
+        $proof->kb_ua = $kbUa;
 
-    return $proof;
-  }
+        return $proof;
+    }
 
-  public function activate()
-  {
-    $this->active = true;
-    $this->save();
-  }
+    public function activate()
+    {
+        $this->active = true;
+        $this->save();
+    }
 
-  public function deactivate()
-  {
-    $this->active = false;
-    $this->save();
-  }
+    public function deactivate()
+    {
+        $this->active = false;
+        $this->save();
+    }
 
-  public function user()
-  {
-      return $this->belongsTo('Flarum\User\User');
-  }
+    public function user()
+    {
+        return $this->belongsTo('Flarum\User\User');
+    }
 }

@@ -12,11 +12,11 @@ use Bkolobara\Keybase\Proof;
 class ValidatorController implements RequestHandlerInterface
 {
     const KEYBASE_VALIDATION_API =
-        'https://keybase.io/_/api/1.0/sig/proof_valid.json?';
-    
+    'https://keybase.io/_/api/1.0/sig/proof_valid.json?';
+
     protected $app;
     private $httpClient;
-    
+
     public function __construct(Application $app)
     {
         $this->httpClient = new \GuzzleHttp\Client();
@@ -52,7 +52,7 @@ class ValidatorController implements RequestHandlerInterface
                     'attributes' => array(
                         'proof_valid' => false,
                         'error' => 'You are logged in as ' . $actor->username .
-                        '. Unable to create link for username ' . $username
+                            '. Unable to create link for username ' . $username
                     )
                 )
             ));
@@ -67,26 +67,26 @@ class ValidatorController implements RequestHandlerInterface
         $domain = preg_replace($prefix, '', $url);
 
         $proofValidationURL = self::KEYBASE_VALIDATION_API .
-                              'domain=' . $domain .
-                              '&kb_username=' . $kbUsername .
-                              '&username=' . $username .
-                              '&sig_hash= ' . $sigHash;
-        
+            'domain=' . $domain .
+            '&kb_username=' . $kbUsername .
+            '&username=' . $username .
+            '&sig_hash= ' . $sigHash;
+
         $result = $this->httpClient->request('GET', $proofValidationURL);
         $result = json_decode($result->getBody(), true);
 
         if (array_key_exists("proof_valid", $result) && $result['proof_valid']) {
             // Check if we already saved this signature hash.
             $proof = Proof::where('user_id', $actor->id)->where('sig_hash', $sigHash)->first();
-            if($proof) {
-               $result['proof_id'] = $proof->id;
+            if ($proof) {
+                $result['proof_id'] = $proof->id;
             } else {
                 $new_proof = Proof::create($actor, $kbUsername, $sigHash, $kbUa);
                 $new_proof->save();
                 $result['proof_id'] = $new_proof->id;
             }
         }
-        
+
         return new JsonResponse(array(
             'data' => array(
                 'type' => 'keybaseValidator',

@@ -29,7 +29,7 @@ class DeleteSvgFullController extends AbstractDeleteController
         $this->assertAdmin($request->getAttribute('actor'));
         $path = $this->settings->get('keybase_svg_full_path');
         $this->settings->set('keybase_svg_full_path', null);
-        $uploadDir = new Filesystem(new Local($this->app->publicPath().'/assets'));
+        $uploadDir = new Filesystem(new Local($this->app->publicPath() . '/assets'));
         if ($uploadDir->has($path)) {
             $uploadDir->delete($path);
         }

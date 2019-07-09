@@ -58,15 +58,6 @@
   color: white;
 }
 
-.keybase-badge-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.keybase-badge-container a:hover {
-  text-decoration: none;
-}
-
 .keybase-badge {
   background-color: #37bd9a;
   padding: 4px;
@@ -76,4 +67,8 @@
 
 .keybase-badge:hover {
   background-color: #20a080;
+}
+
+.keybase-badge button:hover {
+  text-decoration: none;
 }

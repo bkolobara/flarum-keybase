@@ -19,18 +19,25 @@ class ConfigController implements RequestHandlerInterface
     {
         $this->settings = $settings;
         $this->app = $app;
-    } 
+    }
 
     public function handle(Request $request): Response
     {
         // Check required configuration settings.
-        if (!$this->settings->get('keybase_svg_black_path') ||
+        if (
+            !$this->settings->get('keybase_svg_black_path') ||
             !$this->settings->get('keybase_svg_full_path') ||
             !$this->settings->get('keybase_contact_email') ||
-            !$this->settings->get('keybase_contact')) {
-                return new JsonResponse(array(
-                    "error" => "Contact information or SVG logos not configured.")
-                    , 200, [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+            !$this->settings->get('keybase_contact')
+        ) {
+            return new JsonResponse(
+                array(
+                    "error" => "Contact information or SVG logos not configured."
+                ),
+                200,
+                [],
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            );
         }
 
         $config = array(

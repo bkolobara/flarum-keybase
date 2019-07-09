@@ -20,11 +20,11 @@ use Bkolobara\Keybase\DeleteSvgFullController;
 
 return [
   (new Extend\Frontend('forum'))
-    ->js(__DIR__.'/js/dist/forum.js')
-    ->css(__DIR__.'/css/forum.css')
+    ->js(__DIR__ . '/js/dist/forum.js')
+    ->css(__DIR__ . '/css/forum.css')
     ->route('/new-keybase-profile-proof', 'keybase.proof'),
   (new Extend\Frontend('admin'))
-    ->js(__DIR__.'/js/dist/admin.js')
+    ->js(__DIR__ . '/js/dist/admin.js')
     ->css(__DIR__ . '/css/admin.less'),
 
   (new Extend\Routes('api'))
@@ -37,20 +37,18 @@ return [
     ->delete('/keybase_svg_black', 'keybase.svg.black', DeleteSvgBlackController::class)
     ->post('/keybase_svg_full', 'keybase.svg.full', UploadSvgFullController::class)
     ->delete('/keybase_svg_full', 'keybase.svg.full', DeleteSvgFullController::class),
-  
-  function (Dispatcher $events) {
-    $events->listen(GetModelRelationship::class, function (GetModelRelationship $event) {
-        if ($event->isRelationship(User::class, 'proofs')) {
-          return $event->model->hasMany(Proof::class);
-        }
-    });
-  },
 
-  function (Dispatcher $events) {
+  function (Dispatcher $events, Application $app) {
+    $events->listen(GetModelRelationship::class, function (GetModelRelationship $event) {
+      if ($event->isRelationship(User::class, 'proofs')) {
+        return $event->model->hasMany(Proof::class);
+      }
+    });
+
     $events->listen(Serializing::class, function (Serializing $event) {
       if ($event->isSerializer(UserSerializer::class)) {
         $event->attributes['proofs'] = $event->model->proofs;
       }
     });
-  }
+  },
 ];
