@@ -12,10 +12,10 @@ export default class LoginPage extends Page {
       app.modal.show(new LogInModal());
     } else {
       const urlParams = new URLSearchParams(window.location.search);
-      this.kbUsername = urlParams.get("kb_username");
+      this.kbUsername = urlParams.get("kbUsername");
       this.username = urlParams.get("username");
-      this.kbUa = urlParams.get("kb_ua");
-      this.sighHash = urlParams.get("sig_hash");
+      this.kbUa = urlParams.get("kbUa");
+      this.sighHash = urlParams.get("sigHash");
 
       const keybaseValidator = await app.store.find("keybase-validate", {
         kb_username: this.kbUsername,
