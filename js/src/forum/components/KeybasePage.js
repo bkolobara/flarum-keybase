@@ -15,13 +15,13 @@ export default class LoginPage extends Page {
       this.kbUsername = urlParams.get("kbUsername");
       this.username = urlParams.get("username");
       this.kbUa = urlParams.get("kbUa");
-      this.sighHash = urlParams.get("sigHash");
+      this.sigHash = urlParams.get("sigHash");
 
       const keybaseValidator = await app.store.find("keybase-validate", {
         kb_username: this.kbUsername,
         username: this.username,
         kb_ua: this.kbUa,
-        sig_hash: this.sighHash
+        sig_hash: this.sigHash
       });
       this.proofValid = keybaseValidator.proofValid();
       if (this.proofValid) {
@@ -40,7 +40,7 @@ export default class LoginPage extends Page {
       window.location.replace(
         `https://keybase.io/_/proof_creation_success?domain=galactictalk.org` +
           `&kb_username=${this.kbUsername}&username=${this.username}` +
-          `&sig_hash=${this.token}&kb_ua=${this.kbUa}`
+          `&sig_hash=${this.sigHash}&kb_ua=${this.kbUa}`
       );
     }
   }
