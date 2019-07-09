@@ -32,7 +32,10 @@ export default class LoginPage extends Page {
   }
 
   async authorise(e) {
-    const result = await m.request(`/api/keybase-activate/${this.proofId}`);
+    const result = await m.request({
+      method: "GET",
+      url: `/api/keybase-activate/${this.proofId}`
+    });
     if (result) {
       window.location.replace(
         `https://keybase.io/_/proof_creation_success?domain=galactictalk.org` +
