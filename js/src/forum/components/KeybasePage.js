@@ -26,13 +26,14 @@ export default class LoginPage extends Page {
       this.proofValid = keybaseValidator.proofValid();
       if (this.proofValid) {
         this.proofId = keybaseValidator.proofId();
+        m.redraw();
       }
     }
   }
 
   async authorise(e) {
-    const result = await fetch(`/api/keybase-activate/${this.proofId}`);
-    if (await result.json()) {
+    const result = await m.request(`/api/keybase-activate/${this.proofId}`);
+    if (result) {
       window.location.replace(
         `https://keybase.io/_/proof_creation_success?domain=galactictalk.org` +
           `&kb_username=${this.kbUsername}&username=${this.username}` +
@@ -52,6 +53,15 @@ export default class LoginPage extends Page {
                 Click here to log in.
               </a>
             </h3>
+          </div>
+        </div>
+      );
+    }
+    if (this.proofValid === undefined) {
+      return (
+        <div class="keybase">
+          <div class="authorize-window">
+            <h3>Checking signature.</h3>
           </div>
         </div>
       );
