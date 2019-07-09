@@ -43,7 +43,7 @@ class ProofLiveService extends ServiceProvider
                     $proof->deactivate();
                 }
             }
-        })->twiceDaily(1, 13)
+        })->twiceDaily(4, 16)
             ->name('keybase_proof_live')
             ->withoutOverlapping();
     }
