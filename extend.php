@@ -1,6 +1,7 @@
 <?php
 
 use Flarum\Extend;
+use Flarum\Foundation\Application;
 use Illuminate\Contracts\Events\Dispatcher;
 use Flarum\Event\GetModelRelationship;
 use Flarum\Api\Event\Serializing;
@@ -17,8 +18,11 @@ use Bkolobara\Keybase\UploadSvgBlackController;
 use Bkolobara\Keybase\DeleteSvgBlackController;
 use Bkolobara\Keybase\UploadSvgFullController;
 use Bkolobara\Keybase\DeleteSvgFullController;
+use Bkolobara\Keybase\ProofLiveService;
 
 return [
+  new \FoF\Console\Extend\EnableConsole,
+
   (new Extend\Frontend('forum'))
     ->js(__DIR__ . '/js/dist/forum.js')
     ->css(__DIR__ . '/css/forum.css')
@@ -38,7 +42,9 @@ return [
     ->post('/keybase_svg_full', 'keybase.svg.full', UploadSvgFullController::class)
     ->delete('/keybase_svg_full', 'keybase.svg.full', DeleteSvgFullController::class),
 
-  function (Dispatcher $events) {
+  function (Dispatcher $events, Application $app) {
+    $app->register(ProofLiveService::class);
+
     $events->listen(GetModelRelationship::class, function (GetModelRelationship $event) {
       if ($event->isRelationship(User::class, 'proofs')) {
         return $event->model->hasMany(Proof::class);
