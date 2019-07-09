@@ -38,7 +38,7 @@ return [
     ->post('/keybase_svg_full', 'keybase.svg.full', UploadSvgFullController::class)
     ->delete('/keybase_svg_full', 'keybase.svg.full', DeleteSvgFullController::class),
 
-  function (Dispatcher $events, Application $app) {
+  function (Dispatcher $events) {
     $events->listen(GetModelRelationship::class, function (GetModelRelationship $event) {
       if ($event->isRelationship(User::class, 'proofs')) {
         return $event->model->hasMany(Proof::class);
