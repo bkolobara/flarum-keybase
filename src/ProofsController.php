@@ -16,7 +16,7 @@ class ProofsController implements RequestHandlerInterface
     public function handle(Request $request): Response
     {
         $username = array_get($request->getQueryParams(), 'username');
-        $user = User::where('username', $username)->where('is_email_confirmed', true)->first();
+        $user = User::where('username', $username)->first();
         if ($user) {
             $proofs = Proof::where('user_id', $user->id)->where('active', true)->get();
             $signatures = array();
