@@ -95,7 +95,7 @@ export default class LoginPage extends Page {
     return (
       <div class="keybase">
         <div class="authorize-window">
-          <h3>Authoriz this cryptographic connection?</h3>
+          <h3>Authorize this cryptographic connection?</h3>
           <div class="accounts">
             <div class="forum">
               {!localAvatarUrl ? (
