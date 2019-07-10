@@ -34,7 +34,7 @@ class DeactivatorController implements RequestHandlerInterface
             }
             return new JsonResponse(true, 200);
         } else {
-            return new JsonResponse(false, 101);
+            return new JsonResponse(false, 403);
         }
     }
 }
