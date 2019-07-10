@@ -49,6 +49,7 @@ export default function extendUserCard() {
     const proofs = this.props.user.data.attributes.proofs;
     const canRevoke =
       app.session.user && app.session.user.id() == this.props.user.id();
+    // TODO: Add one big element on the cards page and sort all proofs nicely.
     for (let proof of proofs) {
       const proofUrl = `https://keybase.io/${proof.kb_username}/sigs/${
         proof.sig_hash

@@ -36,7 +36,7 @@ class ValidatorController implements RequestHandlerInterface
                     'type' => 'keybaseValidator',
                     'attributes' => array(
                         'proof_valid' => false,
-                        'error' => 'You must be logged in to perform this check'
+                        'error' => 'You must be logged in to perform this check.'
                     )
                 )
             ));
@@ -45,14 +45,14 @@ class ValidatorController implements RequestHandlerInterface
         // You can only link your own account to Keybase.
         $requestParams = $request->getQueryParams();
         $username = array_get($requestParams, 'username');
-        if ($actor->username != $username) {
+        if (strtolower($actor->username) != $username) {
             return new JsonResponse(array(
                 'data' => array(
                     'type' => 'keybaseValidator',
                     'attributes' => array(
                         'proof_valid' => false,
                         'error' => 'You are logged in as ' . $actor->username .
-                            '. Unable to create link for username ' . $username
+                            '. Log out to prove another user.'
                     )
                 )
             ));

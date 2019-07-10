@@ -60,9 +60,9 @@
 
 .keybase-badge {
   background-color: #37bd9a;
-  padding: 4px;
+  padding: 2px;
+  margin: 2px 0;
   border-radius: 4px;
-  margin-right: 5px;
 }
 
 .keybase-badge:hover {

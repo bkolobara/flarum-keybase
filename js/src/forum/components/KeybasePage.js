@@ -26,8 +26,10 @@ export default class LoginPage extends Page {
       this.proofValid = keybaseValidator.proofValid();
       if (this.proofValid) {
         this.proofId = keybaseValidator.proofId();
-        m.redraw();
+      } else {
+        this.error = keybaseValidator.error();
       }
+      m.redraw();
     }
   }
 
@@ -51,11 +53,21 @@ export default class LoginPage extends Page {
         <div class="keybase">
           <div class="authorize-window">
             <h3>
-              You must be logged in to link your accounts.
+              You must be logged in to prove your identity.
               <a onclick={e => app.modal.show(new LogInModal())}>
+                {" "}
                 Click here to log in.
               </a>
             </h3>
+          </div>
+        </div>
+      );
+    }
+    if (this.error) {
+      return (
+        <div class="keybase">
+          <div class="authorize-window">
+            <h3>{this.error}</h3>
           </div>
         </div>
       );
