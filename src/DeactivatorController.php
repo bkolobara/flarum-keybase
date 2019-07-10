@@ -25,7 +25,7 @@ class DeactivatorController implements RequestHandlerInterface
         $proof = Proof::find($id);
         $actor = $request->getAttribute('actor');
 
-        if ($proof->user->id == $actor->id) {
+        if ($proof && $proof->user->id == $actor->id) {
             $proof->deactivate();
             $autoGroup = $this->settings->get('keybase_auto_group');
             // If this is the last active proof, remove user from group.

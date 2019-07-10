@@ -25,11 +25,11 @@ class ActivatorController implements RequestHandlerInterface
         $proof = Proof::find($id);
         $actor = $request->getAttribute('actor');
 
-        if ($proof && $actor && $proof->user->id == $actor->id) {
+        if ($proof && $proof->user->id == $actor->id) {
             $proof->activate();
             $autoGroup = $this->settings->get('keybase_auto_group');
             // Add user to group if he is already not part of it.
-            if ($autoGroup && !$proof->user->proofs->contains($autoGroup)) {
+            if ($autoGroup && !$proof->user->groups->contains($autoGroup)) {
                 $proof->user->groups()->attach($autoGroup);
             }
             return new JsonResponse(true, 200);
