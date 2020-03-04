@@ -21,8 +21,6 @@ use Bkolobara\Keybase\DeleteSvgFullController;
 use Bkolobara\Keybase\ProofLiveService;
 
 return [
-  new \FoF\Console\Extend\EnableConsole,
-
   (new Extend\Frontend('forum'))
     ->js(__DIR__ . '/js/dist/forum.js')
     ->css(__DIR__ . '/css/forum.css')

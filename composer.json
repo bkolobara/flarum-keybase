@@ -4,8 +4,7 @@
   "type": "flarum-extension",
   "require": {
     "flarum/core": "^0.1.0-beta.12",
-    "guzzlehttp/guzzle": "^6.3",
-    "fof/console": "^0.5.0"
+    "guzzlehttp/guzzle": "^6.3"
   },
   "autoload": {
     "psr-4": {
