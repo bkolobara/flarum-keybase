@@ -18,7 +18,7 @@ use Bkolobara\Keybase\UploadSvgBlackController;
 use Bkolobara\Keybase\DeleteSvgBlackController;
 use Bkolobara\Keybase\UploadSvgFullController;
 use Bkolobara\Keybase\DeleteSvgFullController;
-use Bkolobara\Keybase\ProofLiveService;
+// use Bkolobara\Keybase\ProofLiveService;
 
 return [
   (new Extend\Frontend('forum'))
@@ -41,7 +41,7 @@ return [
     ->delete('/keybase_svg_full', 'keybase.svg.full', DeleteSvgFullController::class),
 
   function (Dispatcher $events, Application $app) {
-    $app->register(ProofLiveService::class);
+    // $app->register(ProofLiveService::class);
 
     $events->listen(GetModelRelationship::class, function (GetModelRelationship $event) {
       if ($event->isRelationship(User::class, 'proofs')) {
