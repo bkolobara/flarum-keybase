@@ -6,7 +6,7 @@ use Flarum\Foundation\Application;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
-use Zend\Diactoros\Response\JsonResponse;
+use Laminas\Diactoros\Response\JsonResponse;
 use Bkolobara\Keybase\Proof;
 
 class ValidatorController implements RequestHandlerInterface
