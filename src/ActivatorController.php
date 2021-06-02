@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Illuminate\Support\Arr;
 
 use Bkolobara\Keybase\Proof;
 
@@ -21,7 +22,7 @@ class ActivatorController implements RequestHandlerInterface
 
     public function handle(Request $request): Response
     {
-        $id = array_get($request->getQueryParams(), 'id');
+        $id = Arr::get($request->getQueryParams(), 'id');
         $proof = Proof::find($id);
         $actor = $request->getAttribute('actor');
 

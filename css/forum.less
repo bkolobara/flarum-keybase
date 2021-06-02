@@ -1,0 +1,110 @@
+.Keybase {
+  .authorize-window {
+    width: 320px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: #444;
+  }
+
+  .authorize-window h3 {
+    font-size: 20px;
+    padding: 10px 0;
+  }
+
+  .authorize-window .accounts {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    box-shadow: 1px 1px 3px #eee;
+    padding: 20px;
+    font-size: 16px;
+  }
+
+  .authorize-window .accounts .forum {
+    border-bottom: 1px solid #eee;
+  }
+
+  .authorize-window img {
+    margin: 10px;
+    border-radius: 100%;
+    width: 80px;
+  }
+
+  .authorize-window .no-avatar {
+    margin: 10px;
+    width: 80px;
+    height: 80px;
+  }
+
+  .authorize-window img.keybase {
+    border-radius: 0;
+    width: 75px;
+    padding-top: 10px;
+  }
+
+  .authorize-window button {
+    margin-top: 10px;
+    background-color: #eee; /* Green */
+    border: none;
+    border-radius: 10px;
+    padding: 10px 5px;
+    font-size: 20px;
+  }
+
+  .authorize-window button.yes {
+    background-color: #37bd9a;
+    color: white;
+  }
+}
+
+.UserCard-profile {
+  span.Badge[data-original-title="Keybase"] {
+    display: none;
+  }
+
+  .UserCard-info {
+    .keybase-row {
+      display: flex;
+      align-items: center;
+    }
+
+    .item-keybase {
+      display: block;
+      margin-top: 20px;
+    }
+
+    ul {
+      display: flex;
+      align-items: center;
+      font-style: bold;
+      font-size: 18px;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin-left: 5px;
+      }
+
+      .deactivate {
+        margin: 0 10px 0 5px;
+      }
+    }
+  }
+}
+
+.keybase-badge {
+  background-color: #37bd9a;
+  padding: 2px 8px;
+  margin: 2px;
+  border-radius: 4px;
+}
+
+.keybase-badge:hover {
+  background-color: #20a080;
+}
+
+.keybase-badge button:hover {
+  text-decoration: none;
+}

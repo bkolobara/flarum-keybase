@@ -16,7 +16,7 @@ app.initializers.add("keybase-link-page", () => {
 
   app.routes.keybaseProfileProof = {
     path: "/new-keybase-profile-proof",
-    component: KeybasePage.component()
+    component: KeybasePage
   };
 
   extendUserCard();

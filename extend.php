@@ -4,7 +4,6 @@ use Flarum\Extend;
 use Flarum\Foundation\Application;
 use Illuminate\Contracts\Events\Dispatcher;
 use Flarum\Event\GetModelRelationship;
-use Flarum\Api\Event\Serializing;
 use Flarum\User\User;
 use Flarum\Api\Serializer\UserSerializer;
 
@@ -23,7 +22,7 @@ use Bkolobara\Keybase\DeleteSvgFullController;
 return [
   (new Extend\Frontend('forum'))
     ->js(__DIR__ . '/js/dist/forum.js')
-    ->css(__DIR__ . '/css/forum.css')
+    ->css(__DIR__ . '/css/forum.less')
     ->route('/new-keybase-profile-proof', 'keybase.proof'),
   (new Extend\Frontend('admin'))
     ->js(__DIR__ . '/js/dist/admin.js')
@@ -36,23 +35,15 @@ return [
     ->get('/keybase-deactivate/{id}', 'keybase.deactivate', DeactivatorController::class)
     ->get('/keybase-proofs/{username}', 'keybase.proofs', ProofsController::class)
     ->post('/keybase_svg_black', 'keybase.svg.black', UploadSvgBlackController::class)
-    ->delete('/keybase_svg_black', 'keybase.svg.black', DeleteSvgBlackController::class)
+    ->delete('/keybase_svg_black', 'keybase.svg.black.delete', DeleteSvgBlackController::class)
     ->post('/keybase_svg_full', 'keybase.svg.full', UploadSvgFullController::class)
-    ->delete('/keybase_svg_full', 'keybase.svg.full', DeleteSvgFullController::class),
+    ->delete('/keybase_svg_full', 'keybase.svg.full.delete', DeleteSvgFullController::class),
 
-  function (Dispatcher $events, Application $app) {
-    // $app->register(ProofLiveService::class);
+  (new Extend\Model(User::class))
+    ->hasMany('proofs', 'Bkolobara\Keybase\Proof', 'user_id'),
 
-    $events->listen(GetModelRelationship::class, function (GetModelRelationship $event) {
-      if ($event->isRelationship(User::class, 'proofs')) {
-        return $event->model->hasMany(Proof::class);
-      }
-    });
-
-    $events->listen(Serializing::class, function (Serializing $event) {
-      if ($event->isSerializer(UserSerializer::class)) {
-        $event->attributes['proofs'] = $event->model->proofs;
-      }
-    });
-  },
+  (new Extend\ApiSerializer(UserSerializer::class))
+    ->attribute('proofs', function ($serializer, $user, $attributes) {
+      return $user->proofs;
+    }),
 ];

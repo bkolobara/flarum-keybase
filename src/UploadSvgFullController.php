@@ -12,6 +12,7 @@ use League\Flysystem\MountManager;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Flarum\Api\Controller\ShowForumController;
+use Illuminate\Support\Arr;
 
 class UploadSvgFullController extends ShowForumController
 {
@@ -29,7 +30,7 @@ class UploadSvgFullController extends ShowForumController
     public function data(ServerRequestInterface $request, Document $document)
     {
         $this->assertAdmin($request->getAttribute('actor'));
-        $file = array_get($request->getUploadedFiles(), 'keybase_svg_full');
+        $file = Arr::get($request->getUploadedFiles(), 'keybase_svg_full');
         $tmpFile = tempnam($this->app->storagePath() . '/tmp', 'keybase-image');
         $file->moveTo($tmpFile);
         $mount = new MountManager([

@@ -1,15 +1,13 @@
-import Page from "flarum/components/Page";
+import ExtensionPage from 'flarum/components/ExtensionPage';
+
 import Settings from "./components/Settings";
-import Header from "./components/Header";
 
-export default class SettingsPage extends Page {
-  view() {
-    return (
-      <div className="Keybase">
-        {Header.component()}
-
-        <div className="container">{Settings.component()}</div>
-      </div>
-    );
+export default class SettingsPage extends ExtensionPage {
+  content() {
+    return <div className="">
+        <div className="container">
+          <Settings />
+        </div>
+      </div>;
   }
 }

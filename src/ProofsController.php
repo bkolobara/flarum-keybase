@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
+use Illuminate\Support\Arr;
 
 use Flarum\User\User;
 
@@ -15,7 +16,7 @@ class ProofsController implements RequestHandlerInterface
 {
     public function handle(Request $request): Response
     {
-        $username = array_get($request->getQueryParams(), 'username');
+        $username = Arr::get($request->getQueryParams(), 'username');
         $user = User::where('username', $username)->first();
         if ($user) {
             $proofs = Proof::where('user_id', $user->id)->where('active', true)->get();

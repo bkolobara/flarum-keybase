@@ -7,6 +7,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
+use Illuminate\Support\Arr;
+
 use Bkolobara\Keybase\Proof;
 
 class ValidatorController implements RequestHandlerInterface
@@ -44,7 +46,7 @@ class ValidatorController implements RequestHandlerInterface
 
         // You can only link your own account to Keybase.
         $requestParams = $request->getQueryParams();
-        $username = array_get($requestParams, 'username');
+        $username = Arr::get($requestParams, 'username');
         if (strtolower($actor->username) != $username) {
             return new JsonResponse(array(
                 'data' => array(
@@ -58,9 +60,9 @@ class ValidatorController implements RequestHandlerInterface
             ));
         }
 
-        $kbUsername = array_get($requestParams, 'kb_username');
-        $kbUa = array_get($requestParams, 'kb_ua');
-        $sigHash = array_get($requestParams, 'sig_hash');
+        $kbUsername = Arr::get($requestParams, 'kb_username');
+        $kbUa = Arr::get($requestParams, 'kb_ua');
+        $sigHash = Arr::get($requestParams, 'sig_hash');
 
         $url = $this->app->url();
         $prefix = '/^https?:\/\//';

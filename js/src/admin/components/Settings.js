@@ -1,13 +1,16 @@
 import Component from "flarum/Component";
+import Stream from "flarum/utils/Stream";
 import FieldSet from "flarum/components/FieldSet";
 import Button from "flarum/components/Button";
 import saveSettings from "flarum/utils/saveSettings";
 import Alert from "flarum/components/Alert";
+import Select from 'flarum/components/Select';
+import Group from "flarum/models/Group";
 import UploadImageButton from "flarum/components/UploadImageButton";
-import AutoGroupDropdown from "./AutoGroupDropdown";
+import withAttr from "flarum/utils/withAttr";
 
 export default class Settings extends Component {
-  init() {
+  oninit(vnode) {
     this.saving = false;
 
     this.fields = [
@@ -21,7 +24,7 @@ export default class Settings extends Component {
     this.values = {};
 
     const settings = app.data.settings;
-    this.fields.forEach(key => (this.values[key] = m.prop(settings[key])));
+    this.fields.forEach(key => (this.values[key] = Stream(settings[key])));
 
     // Todo: Find a better way for image upload
     app.forum.data.attributes.keybase_svg_blackUrl =
@@ -36,6 +39,31 @@ export default class Settings extends Component {
   }
 
   view() {
+    let keybase_auto_group = this.values.keybase_auto_group;
+
+    let defaultGroup = null;
+    let keybaseAutoGroups = {};
+    // If a group is selected add a Remove option to the list
+    if (keybase_auto_group()) {
+      defaultGroup = keybase_auto_group();
+      keybaseAutoGroups[null] = "Remove Auto Tag";
+    } else {
+      keybaseAutoGroups[null] = "Choose a tag";
+      defaultGroup = null;
+    }
+
+    app.store
+      .all("groups")
+      .filter(
+        group =>
+          [Group.ADMINISTRATOR_ID, Group.GUEST_ID, Group.MEMBER_ID].indexOf(
+            group.id()
+          ) === -1
+      )
+      .forEach(group => {
+        keybaseAutoGroups[group.id()] = group.namePlural();
+      })
+
     return (
       <div>
         <div>
@@ -54,101 +82,102 @@ export default class Settings extends Component {
             label: app.translator.trans(
               "core.admin.basics.forum_title_heading"
             ),
-            children: [
-              <input
-                className="FormControl"
-                value={this.values.forum_title()}
-                oninput={m.withAttr("value", this.values.forum_title)}
-              />
-            ]
-          })}
+          },[
+            <input
+              className="FormControl"
+              value={this.values.forum_title()}
+              oninput={withAttr("value", this.values.forum_title)}
+            />
+          ])}
 
           {FieldSet.component({
             label: app.translator.trans(
               "core.admin.basics.forum_description_heading"
             ),
-            children: [
-              <div className="helpText">
-                {app.translator.trans(
-                  "core.admin.basics.forum_description_text"
-                )}
-              </div>,
-              <textarea
-                className="FormControl"
-                value={this.values.forum_description()}
-                oninput={m.withAttr("value", this.values.forum_description)}
-              />
-            ]
-          })}
+          },[
+            <div className="helpText">
+              {app.translator.trans(
+                "core.admin.basics.forum_description_text"
+              )}
+            </div>,
+            <textarea
+              className="FormControl"
+              value={this.values.forum_description()}
+              oninput={withAttr("value", this.values.forum_description)}
+            />
+          ])}
 
           {FieldSet.component({
             label: "Autotag",
-            children: [
-              <div className="helpText">
-                Here you can choose a group that will be automatically added to
-                a users that links their account with Keybase.
-              </div>,
-              <AutoGroupDropdown setting={this.values.keybase_auto_group} />
-            ]
-          })}
+          },[
+            <div className="helpText">
+              Here you can choose a group that will be automatically added to
+              a users that links their account with Keybase.
+            </div>,
+            Select.component({
+              options: keybaseAutoGroups,
+              value: defaultGroup,
+              onchange: (val) => {
+                keybase_auto_group(val);
+                this.hasChanges = true;
+              }
+            })
+          ])}
 
           {FieldSet.component({
             label: "Contact information",
-            children: [
-              <div className="helpText">
-                A contact for Keybase in case of issues.
-              </div>,
-              <div className="helpText">Email</div>,
-              <input
-                className="FormControl"
-                value={this.values.keybase_contact_email()}
-                oninput={m.withAttr("value", this.values.keybase_contact_email)}
-              />,
-              <div className="helpText">Keybase (e.g. user@keybase)</div>,
-              <input
-                className="FormControl"
-                value={this.values.keybase_contact()}
-                oninput={m.withAttr("value", this.values.keybase_contact)}
-              />
-            ]
-          })}
+          },[
+            <div className="helpText">
+              A contact for Keybase in case of issues.
+            </div>,
+            <div className="helpText">Email</div>,
+            <input
+              className="FormControl"
+              value={this.values.keybase_contact_email()}
+              oninput={withAttr("value", this.values.keybase_contact_email)}
+            />,
+            <div className="helpText">Keybase (e.g. user@keybase)</div>,
+            <input
+              className="FormControl"
+              value={this.values.keybase_contact()}
+              oninput={withAttr("value", this.values.keybase_contact)}
+            />
+          ])}
 
           {FieldSet.component({
             label: "Logo",
-            children: [
-              <div className="helpText">
-                Your brand logo will appear in various places around the Keybase
-                app. Assets will be rehosted by Keybase, so let them know about
-                updates.
-                <h3>SVG Black</h3>
-                <p>
-                  A full-black monochrome SVG. Should look good at 16px square.
-                  Expand all texts and strokes to shapes.
-                </p>
-              </div>,
-              UploadImageButton.component({
-                name: "keybase_svg_black"
-              }),
-              <div className="helpText">
-                <h3>SVG Full</h3>
-                <p>
-                  A full color SVG. Should look good at 32px square. Expand all
-                  texts and strokes to shapes.
-                </p>
-              </div>,
-              UploadImageButton.component({
-                name: "keybase_svg_full"
-              })
-            ]
-          })}
+          },[
+            <div className="helpText">
+              Your brand logo will appear in various places around the Keybase
+              app. Assets will be rehosted by Keybase, so let them know about
+              updates.
+              <h3>SVG Black</h3>
+              <p>
+                A full-black monochrome SVG. Should look good at 16px square.
+                Expand all texts and strokes to shapes.
+              </p>
+            </div>,
+            UploadImageButton.component({
+              name: "keybase_svg_black"
+            }),
+            <div className="helpText">
+              <h3>SVG Full</h3>
+              <p>
+                A full color SVG. Should look good at 32px square. Expand all
+                texts and strokes to shapes.
+              </p>
+            </div>,
+            UploadImageButton.component({
+              name: "keybase_svg_full"
+            })
+          ])}
 
           {Button.component({
             type: "submit",
             className: "Button Button--primary",
-            children: app.translator.trans("core.admin.basics.submit_button"),
             loading: this.saving,
             disabled: !this.changed()
-          })}
+          }, app.translator.trans("core.admin.settings.submit_button"))}
         </form>
       </div>
     );
@@ -187,14 +216,12 @@ export default class Settings extends Component {
         app.alerts.show(
           (this.successAlert = new Alert({
             type: "success",
-            children: app.translator.trans("core.admin.basics.saved_message")
-          }))
+          }, app.translator.trans("core.admin.basics.saved_message")))
         );
       })
       .catch(() => {})
       .then(() => {
         this.saving = false;
-        console.log(this.saving);
         m.redraw();
       });
   }
