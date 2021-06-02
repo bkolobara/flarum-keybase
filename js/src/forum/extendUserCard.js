@@ -2,13 +2,15 @@ import { extend } from "flarum/extend";
 import app from "flarum/app";
 import UserCard from "flarum/components/UserCard";
 import Component from 'flarum/Component';
-import Button from "flarum/components/Button";
 
 class KeybaseBadge extends Component {
   view() {
     return <li>
       <a target="_blank" href={this.attrs.proofUrl}>{this.attrs.kbUsername}</a>
-      <a class="deactivate" onclick={ () => deactivate(this.attrs.id)}><i class="icon far fa-times-circle"></i></a>
+      { this.attrs.canRevoke ?
+        <a class="deactivate" onclick={ () => deactivate(this.attrs.id)}><i class="icon far fa-times-circle"></i></a>
+        : null
+      }
     </li>;
   }
 }
@@ -33,10 +35,9 @@ export default function extendUserCard() {
     items.add(
       "keybase",
       <div class="keybase-row ">
-        {proofs.length > 0 ? [
           <span class="Badge" title="" style="background-color: #37bd9a; margin-right: 3px;">
             <i class="icon fab fa-keybase Badge-icon"></i>
-          </span>,
+          </span>
           <ul>
             {proofs.map((proof) => {
               const proofUrl = `https://keybase.io/${proof.kb_username}/sigs/${proof.sig_hash}`;
@@ -55,8 +56,6 @@ export default function extendUserCard() {
               );
             })}
           </ul>
-        ]
-        : ""}
       </div>
     );
   });
