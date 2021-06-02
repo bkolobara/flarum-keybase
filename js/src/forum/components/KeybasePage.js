@@ -4,12 +4,13 @@ import LogInModal from "flarum/components/LogInModal";
 import keybaseLogo from "../../../img/keybase_logo.svg";
 
 export default class LoginPage extends Page {
-  async init() {
-    super.init();
+  async oninit(vnode) {
+    super.oninit(vnode);
+
     this.loggedIn = true;
     if (!app.session.user) {
       this.loggedIn = false;
-      app.modal.show(new LogInModal());
+      app.modal.show(LogInModal);
     } else {
       const urlParams = new URLSearchParams(window.location.search);
       this.kbUsername = urlParams.get("kbUsername");
@@ -54,7 +55,7 @@ export default class LoginPage extends Page {
           <div class="authorize-window">
             <h3>
               You must be logged in to prove your identity.
-              <a onclick={e => app.modal.show(new LogInModal())}>
+              <a onclick={e => app.modal.show(LogInModal)}>
                 {" "}
                 Click here to log in.
               </a>
