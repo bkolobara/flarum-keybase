@@ -5,6 +5,7 @@ namespace Bkolobara\Keybase\Console;
 use Flarum\Console\AbstractCommand;
 use Flarum\Foundation\Application;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\User;
 use Bkolobara\Keybase\Proof;
 
 class ValidateProofsCommand extends AbstractCommand
@@ -101,6 +102,49 @@ class ValidateProofsCommand extends AbstractCommand
         $this->info("Valid proofs: {$validCount}");
         $this->info("Deleted proofs: {$deletedCount}");
 
+        // Cleanup: Remove auto-group from users without any valid proofs
+        $this->cleanupOrphanedTags();
+
         return 0;
+    }
+
+    /**
+     * Remove the Keybase auto-group from users who have no valid proofs
+     */
+    protected function cleanupOrphanedTags()
+    {
+        $autoGroup = $this->settings->get('keybase_auto_group');
+
+        if (!$autoGroup) {
+            return;
+        }
+
+        $this->info("\nCleaning up orphaned Keybase tags...");
+        $removedCount = 0;
+
+        // Get all users who have the Keybase auto-group
+        $usersWithTag = User::whereHas('groups', function ($query) use ($autoGroup) {
+            $query->where('id', $autoGroup);
+        })->get();
+
+        foreach ($usersWithTag as $user) {
+            // Check if user has any active proofs
+            $activeProofsCount = Proof::where('user_id', $user->id)
+                ->where('active', true)
+                ->count();
+
+            // If no active proofs, remove the tag
+            if ($activeProofsCount === 0) {
+                $user->groups()->detach($autoGroup);
+                $this->info("  → Removed tag from user: {$user->username}");
+                $removedCount++;
+            }
+        }
+
+        if ($removedCount === 0) {
+            $this->info("  → No orphaned tags found");
+        } else {
+            $this->info("  → Removed {$removedCount} orphaned tag(s)");
+        }
     }
 }
