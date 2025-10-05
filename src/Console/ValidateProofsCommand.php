@@ -69,7 +69,7 @@ class ValidateProofsCommand extends AbstractCommand
                     $result['proof_live'];
 
                 if (!$isValid) {
-                    $this->warn("  → Invalid or expired proof. Deleting...");
+                    $this->info("  → Invalid or expired proof. Deleting...");
 
                     // Remove from auto-group if configured
                     $autoGroup = $this->settings->get('keybase_auto_group');
