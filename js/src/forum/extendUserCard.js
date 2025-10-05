@@ -32,6 +32,12 @@ export default function extendUserCard() {
     const proofs = this.attrs.user.data.attributes.proofs;
     const canRevoke = app.session.user && app.session.user.id() == this.attrs.user.id();
 
+    // Only show Keybase badge if there are active proofs
+    const activeProofs = proofs.filter(proof => proof.active);
+    if (activeProofs.length === 0) {
+      return;
+    }
+
     items.add(
       "keybase",
       <div class="keybase-row ">
@@ -39,12 +45,8 @@ export default function extendUserCard() {
             <i class="icon fab fa-keybase Badge-icon"></i>
           </span>
           <ul>
-            {proofs.map((proof) => {
+            {activeProofs.map((proof) => {
               const proofUrl = `https://keybase.io/${proof.kb_username}/sigs/${proof.sig_hash}`;
-
-              if (!proof.active) {
-                return;
-              }
 
               return (
                 <KeybaseBadge

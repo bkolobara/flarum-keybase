@@ -17,6 +17,7 @@ use Bkolobara\Keybase\UploadSvgBlackController;
 use Bkolobara\Keybase\DeleteSvgBlackController;
 use Bkolobara\Keybase\UploadSvgFullController;
 use Bkolobara\Keybase\DeleteSvgFullController;
+use Bkolobara\Keybase\Console\ValidateProofsCommand;
 // use Bkolobara\Keybase\ProofLiveService;
 
 return [
@@ -27,6 +28,9 @@ return [
   (new Extend\Frontend('admin'))
     ->js(__DIR__ . '/js/dist/admin.js')
     ->css(__DIR__ . '/css/admin.less'),
+
+  (new Extend\Console())
+    ->command(ValidateProofsCommand::class),
 
   (new Extend\Routes('api'))
     ->get('/keybase-config', 'keybase.config', ConfigController::class)
@@ -44,6 +48,6 @@ return [
 
   (new Extend\ApiSerializer(UserSerializer::class))
     ->attribute('proofs', function ($serializer, $user, $attributes) {
-      return $user->proofs;
+      return $user->proofs->where('active', true)->values();
     }),
 ];
